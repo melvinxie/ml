@@ -1,8 +1,6 @@
 """Gradient descent for linear regression."""
 
-from copy import copy
 from numpy import dot
-from scipy.misc import derivative
 
 def h(t, x):
     return dot(t, x)
@@ -20,13 +18,10 @@ def gradient_descent(t0, x , y):
     while True:
         done = True
         new_t = []
-        for i in range(len(t)):
-            def Ji(theta):
-                t_current = copy(t)
-                t_current[i] = theta
-                return J(t_current, x, y)
-            new_t.append(t[i] - a * derivative(Ji, t[i], dx=E))
-            if abs(new_t[i] - t[i]) > E:
+        for j in range(len(t)):
+            d = sum((h(t, x[i]) - y[i]) * x[i][j] for i in range(m)) / m
+            new_t.append(t[j] - a * d)
+            if abs(new_t[j] - t[j]) > E:
                 done = False
         if done:
             break
